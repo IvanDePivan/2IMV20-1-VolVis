@@ -4,6 +4,8 @@
  */
 package volume;
 
+import java.util.Arrays;
+
 /**
  *
  * @author michel
@@ -55,9 +57,7 @@ public class GradientVolume {
     private void compute() {
         // TODO 4: Implement gradient computation.
         // this just initializes all gradients to the vector (0,0,0)
-        for (int i = 0; i < data.length; i++) {
-            data[i] = zero;
-        }
+        Arrays.fill(data, zero);
 
     }
 
@@ -66,8 +66,8 @@ public class GradientVolume {
             return maxmag;
         } else {
             double magnitude = data[0].mag;
-            for (int i = 0; i < data.length; i++) {
-                magnitude = data[i].mag > magnitude ? data[i].mag : magnitude;
+            for (VoxelGradient datum : data) {
+                magnitude = datum.mag > magnitude ? datum.mag : magnitude;
             }
             maxmag = magnitude;
             return magnitude;

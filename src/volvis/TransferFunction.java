@@ -14,13 +14,13 @@ import util.TFChangeListener;
  */
 public class TransferFunction {
 
-    private ArrayList<TFChangeListener> listeners = new ArrayList<TFChangeListener>();
+    private final ArrayList<TFChangeListener> listeners = new ArrayList<>();
     
     public TransferFunction(short min, short max) {
         sMin = min;
         sMax = max;
         sRange = sMax - sMin;
-        controlPoints = new ArrayList<ControlPoint>();
+        controlPoints = new ArrayList<>();
 
         controlPoints.add(new ControlPoint(min, new TFColor(0.0, 0.0, 0.0, 0.0)));
         controlPoints.add(new ControlPoint(max, new TFColor(1.0, 1.0, 1.0, 1.0)));
@@ -113,8 +113,8 @@ public class TransferFunction {
     }
     
     public void changed() {
-        for (int i=0; i<listeners.size(); i++) {
-            listeners.get(i).changed();
+        for (TFChangeListener listener : listeners) {
+            listener.changed();
         }
     }
     
@@ -145,7 +145,7 @@ public class TransferFunction {
 
     }
 
-    public class ControlPoint implements Comparable<ControlPoint> {
+    public static class ControlPoint implements Comparable<ControlPoint> {
 
         public int value;
         public TFColor color;
@@ -157,12 +157,12 @@ public class TransferFunction {
 
         @Override
         public int compareTo(ControlPoint t) {
-            return (value < t.value ? -1 : (value == t.value ? 0 : 1));
+            return (Integer.compare(value, t.value));
         }
         
         @Override
         public String toString() {
-            return new String("(" + value + ") -> " + color.toString());
+            return "(" + value + ") -> " + color.toString();
         }
         
     }

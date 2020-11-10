@@ -736,8 +736,8 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
 
     @Override
     public void changed() {
-        for (int i = 0; i < listeners.size(); i++) {
-            listeners.get(i).changed();
+        for (TFChangeListener listener : listeners) {
+            listener.changed();
         }
     }
 
@@ -916,7 +916,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      *
      * Sets the Iso value.
      *
-     * @param newColor
+     * @param isoValueFront
      */
     public void setIsoValueFront(float isoValueFront) {
         this.isoValueFront = isoValueFront;
@@ -927,7 +927,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      *
      * Sets the Iso value.
      *
-     * @param newColor
+     * @param isoValueBack
      */
     public void setIsoValueBack(float isoValueBack) {
         this.isoValueBack = isoValueBack;
@@ -1168,7 +1168,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param i Pixel i.
      * @param j Pixel j.
      */
-    private void computePixelCoordinatesFloat(double pixelCoord[], double volumeCenter[], double uVec[], double vVec[], float i, float j) {
+    private void computePixelCoordinatesFloat(double[] pixelCoord, double[] volumeCenter, double[] uVec, double[] vVec, float i, float j) {
         // Coordinates of a plane centered at the center of the volume (volumeCenter and oriented according to the plane defined by uVec and vVec
         float imageCenter = image.getWidth() / 2;
         pixelCoord[0] = uVec[0] * (i - imageCenter) + vVec[0] * (j - imageCenter) + volumeCenter[0];
@@ -1190,7 +1190,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param i Pixel i.
      * @param j Pixel j.
      */
-    private void computePixelCoordinates(double pixelCoord[], double volumeCenter[], double uVec[], double vVec[], int i, int j) {
+    private void computePixelCoordinates(double[] pixelCoord, double[] volumeCenter, double[] uVec, double[] vVec, int i, int j) {
         // Coordinates of a plane centered at the center of the volume (volumeCenter and oriented according to the plane defined by uVec and vVec
         int imageCenter = image.getWidth() / 2;
         pixelCoord[0] = uVec[0] * (i - imageCenter) + vVec[0] * (j - imageCenter) + volumeCenter[0];
@@ -1213,7 +1213,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param i Pixel i.
      * @param j Pixel j.
      */
-    private void computePixelCoordinatesBehindFloat(double pixelCoord[], double viewVec[], double uVec[], double vVec[], float i, float j) {
+    private void computePixelCoordinatesBehindFloat(double[] pixelCoord, double[] viewVec, double[] uVec, double[] vVec, float i, float j) {
         int imageCenter = image.getWidth() / 2;
         // Pixel coordinate is calculate having the center (0,0) of the view plane aligned with the center of the volume and moved a distance equivalent
         // to the diaganal to make sure I am far away enough.
@@ -1228,7 +1228,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * Do NOT modify this function.
      *
      * Same as
-     * {@link RaycastRenderer#computePixelCoordinatesBehindFloat(double[], double[], double[], double[], int, int)}
+     * {@link RaycastRenderer#computePixelCoordinatesBehindFloat(double[], double[], double[], double[], float, float)}
      * but for integer pixel coordinates.
      *
      * @param pixelCoord Vector to store the result.
@@ -1238,7 +1238,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param i Pixel i.
      * @param j Pixel j.
      */
-    private void computePixelCoordinatesBehind(double pixelCoord[], double viewVec[], double uVec[], double vVec[], int i, int j) {
+    private void computePixelCoordinatesBehind(double[] pixelCoord, double[] viewVec, double[] uVec, double[] vVec, int i, int j) {
         int imageCenter = image.getWidth() / 2;
         // Pixel coordinate is calculate having the center (0,0) of the view plane aligned with the center of the volume and moved a distance equivalent
         // to the diaganal to make sure I am far away enough.
