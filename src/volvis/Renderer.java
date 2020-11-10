@@ -16,7 +16,7 @@ public abstract class Renderer {
      int winWidth, winHeight;
     boolean visible = false;
     boolean interactiveMode = false;
-    ArrayList<TFChangeListener> listeners = new ArrayList<TFChangeListener>();
+    ArrayList<TFChangeListener> listeners = new ArrayList<>();
 
     public Renderer() {
         

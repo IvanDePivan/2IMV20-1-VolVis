@@ -71,7 +71,7 @@ public class TrackballInteractor {
         rotating = flag;
     }
 
-    private void trackball_ptov(int x, int y, int width, int height, double v[]) {
+    private void trackball_ptov(int x, int y, int width, int height, double[] v) {
         double d, a;
 
         // project x,y onto a hemi-sphere centered within width, height
@@ -80,7 +80,7 @@ public class TrackballInteractor {
         v[1] = (height - 2.0 * y) / radius;
 
         d = Math.sqrt(v[0] * v[0] + v[1] * v[1]);
-        v[2] = Math.cos((Math.PI / 2.0) * ((d < 1.0) ? d : 1.0));
+        v[2] = Math.cos((Math.PI / 2.0) * (Math.min(d, 1.0)));
         a = 1.0 / Math.sqrt(v[0] * v[0] + v[1] * v[1] + v[2] * v[2]);
         v[0] *= a;
         v[1] *= a;

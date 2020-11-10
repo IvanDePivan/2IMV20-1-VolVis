@@ -66,16 +66,16 @@ public class Volume {
 
     public short getMinimum() {
         short minimum = data[0];
-        for (int i=0; i<data.length; i++) {
-            minimum = data[i] < minimum ? data[i] : minimum;
+        for (short datum : data) {
+            minimum = datum < minimum ? datum : minimum;
         }
         return minimum;
     }
 
     public short getMaximum() {
         short maximum = data[0];
-        for (int i=0; i<data.length; i++) {
-            maximum = data[i] > maximum ? data[i] : maximum;
+        for (short datum : data) {
+            maximum = datum > maximum ? datum : maximum;
         }
         return maximum;
     }
@@ -86,8 +86,8 @@ public class Volume {
     
     private void computeHistogram() {
         histogram = new int[getMaximum() + 1];
-        for (int i=0; i<data.length; i++) {
-            histogram[data[i]]++;
+        for (short datum : data) {
+            histogram[datum]++;
         }
     }
     

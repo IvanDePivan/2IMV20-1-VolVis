@@ -9,5 +9,5 @@ package util;
  * @author michel
  */
 public interface TFChangeListener {
-    public void changed();
+    void changed();
 }

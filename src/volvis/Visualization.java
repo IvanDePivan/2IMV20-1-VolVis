@@ -34,7 +34,7 @@ public class Visualization implements GLEventListener, TFChangeListener {
     TrackballInteractor trackball;
 
     public Visualization(GLAutoDrawable canvas) {
-        this.renderers = new ArrayList<Renderer>();
+        this.renderers = new ArrayList<>();
         this.canvas = canvas;
 
         if (canvas instanceof Component) {
@@ -96,9 +96,9 @@ public class Visualization implements GLEventListener, TFChangeListener {
         gl.glMultMatrixd(trackball.getTransformationMatrix(), 0);
 
         // call the visualize() methods of all subscribed renderers
-        for (int i = 0; i < renderers.size(); i++) {
-            ((RaycastRenderer)renderers.get(i)).updateCuttingPlaneVectors(trackball.getTransformationMatrixPlane());
-            renderers.get(i).visualize(gl);
+        for (Renderer renderer : renderers) {
+            ((RaycastRenderer) renderer).updateCuttingPlaneVectors(trackball.getTransformationMatrixPlane());
+            renderer.visualize(gl);
             // blocking call ensures drawing of renderer is completed before
             // next one starts
             gl.glFlush();
@@ -110,9 +110,9 @@ public class Visualization implements GLEventListener, TFChangeListener {
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL2 gl = drawable.getGL().getGL2();
         gl.glViewport(0, 0, width, height);
-        for (int i = 0; i < renderers.size(); i++) {
-            renderers.get(i).setWinWidth(width);
-            renderers.get(i).setWinHeight(height);
+        for (Renderer renderer : renderers) {
+            renderer.setWinWidth(width);
+            renderer.setWinHeight(height);
         }
         winWidth = width;
         winHeight = height;
@@ -130,15 +130,15 @@ public class Visualization implements GLEventListener, TFChangeListener {
         public void mousePressed(MouseEvent e) {
             trackball.setMousePos(e.getX(), e.getY());
 
-            for (int i = 0; i < renderers.size(); i++) {
-                renderers.get(i).setInteractiveMode(true);
+            for (Renderer renderer : renderers) {
+                renderer.setInteractiveMode(true);
             }
         }
 
         @Override
         public void mouseReleased(MouseEvent e) {
-            for (int i = 0; i < renderers.size(); i++) {
-                renderers.get(i).setInteractiveMode(false);
+            for (Renderer renderer : renderers) {
+                renderer.setInteractiveMode(false);
             }
             update();
         }

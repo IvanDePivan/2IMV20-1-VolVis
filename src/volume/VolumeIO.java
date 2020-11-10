@@ -17,18 +17,16 @@ import java.util.Scanner;
 public class VolumeIO {
     
     public VolumeIO(File file) throws IOException {
-        BufferedInputStream stream = null;
-        try {
-            stream = new BufferedInputStream(new FileInputStream(file));
-            
+        try (BufferedInputStream stream = new BufferedInputStream(new FileInputStream(file))) {
+
             stream.mark(2000);
             byte[] magicCode = new byte[16];
             if (stream.read(magicCode) == 16) {
                 String headerText = new String(magicCode);
                 if (headerText.compareTo("# AVS field file") != 0) {
                     System.out.println("not a valid file");
-                } 
-            } 
+                }
+            }
             stream.reset();
             int headerLength = 1;
             while (stream.read() != '\f') {
@@ -37,36 +35,30 @@ public class VolumeIO {
             // skip also next ^L
             headerLength++;
             stream.reset();
-            
+
             byte[] h = new byte[headerLength];
             if (stream.read(h) == headerLength) {
                 String header = new String(h);
                 parseHeader(header);
             }
 
-            int byteCount = x_dim*y_dim*z_dim*data_type;
+            int byteCount = x_dim * y_dim * z_dim * data_type;
             byte[] d = new byte[byteCount];
 
-            if (stream.read(d) == byteCount) {
-                //System.out.println("read " + byteCount + " bytes");
-            }
-            
+            int read = stream.read(d);
+
             data = new short[x_dim * y_dim * z_dim];
             if (data_type == 1) { //bytes
-                for (int i=0; i<byteCount; i++) {
+                for (int i = 0; i < byteCount; i++) {
                     data[i] = (short) (d[i] & 0xFF);
                 }
             } else if (data_type == 2) { //shorts
-                for (int i=0; i<byteCount; i+=2) {
-                    short value = (short) ((d[i]&0xFF) + (d[i+1]&0xFF)*256);
-                    data[i/2] = value;
+                for (int i = 0; i < byteCount; i += 2) {
+                    short value = (short) ((d[i] & 0xFF) + (d[i + 1] & 0xFF) * 256);
+                    data[i / 2] = value;
                 }
             }
-            
-        } finally {
-            if (stream != null) {
-                stream.close();
-            }
+
         }
     }
 
