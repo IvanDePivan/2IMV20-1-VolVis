@@ -19,6 +19,9 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import volvis.TransferFunction2D;
 
+import javax.swing.GroupLayout;
+import javax.swing.JPanel;
+
 /**
  *
  * @author michel and modified by Anna Vilanova 
@@ -27,7 +30,7 @@ import volvis.TransferFunction2D;
  * YOu need to modify it if you want to change the interface
  */
 
-public class TransferFunction2DView extends javax.swing.JPanel {
+public class TransferFunction2DView extends JPanel {
 
     TransferFunction2DEditor ed;
     private final int DOTSIZE = 8;
@@ -170,14 +173,14 @@ public class TransferFunction2DView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents

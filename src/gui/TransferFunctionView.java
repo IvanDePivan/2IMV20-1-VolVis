@@ -15,14 +15,18 @@ import java.awt.event.MouseMotionAdapter;
 import java.awt.geom.Ellipse2D;
 import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
+
+import org.jdesktop.layout.GroupLayout;
 import volvis.TFColor;
 import volvis.TransferFunction;
+
+import javax.swing.JPanel;
 
 /**
  *
  * @author michel
  */
-public class TransferFunctionView extends javax.swing.JPanel {
+public class TransferFunctionView extends JPanel {
 
     private TransferFunction tfunc;
     private final int DOTSIZE = 8;
@@ -254,14 +258,14 @@ public class TransferFunctionView extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            layout.createParallelGroup(GroupLayout.LEADING)
             .add(0, 400, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            layout.createParallelGroup(GroupLayout.LEADING)
             .add(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents

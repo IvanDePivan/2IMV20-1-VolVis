@@ -9,8 +9,19 @@ package gui;
 
 import java.awt.BorderLayout;
 import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Rectangle;
+import java.awt.event.ActionEvent;
 import java.util.ArrayList;
+import javax.swing.GroupLayout;
+import javax.swing.JButton;
 import javax.swing.JColorChooser;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
+import javax.swing.JTextField;
+import javax.swing.LayoutStyle;
+import javax.swing.SwingConstants;
+
 import util.TFChangeListener;
 import volume.GradientVolume;
 import volume.Volume;
@@ -24,7 +35,7 @@ import volvis.TransferFunction2D;
  * NO IMPLEMENTATION NEEDED FOR THE BASIC ASSIGNMENTME 
  * YOu need to modify it if you want to change the interface
  */
-public class TransferFunction2DEditor extends javax.swing.JPanel {
+public class TransferFunction2DEditor extends JPanel {
 
     private Volume vol;
     private GradientVolume gradvol;
@@ -111,46 +122,46 @@ public class TransferFunction2DEditor extends javax.swing.JPanel {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        plotPanel = new javax.swing.JPanel();
-        labelGradMax = new javax.swing.JLabel();
-        labelGradMin = new javax.swing.JLabel();
-        labelMinVal = new javax.swing.JLabel();
-        labelMaxVal = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        jLabel3 = new javax.swing.JLabel();
-        jLabel4 = new javax.swing.JLabel();
-        jLabel5 = new javax.swing.JLabel();
-        jLabel6 = new javax.swing.JLabel();
-        colorButton = new javax.swing.JButton();
-        jLabel7 = new javax.swing.JLabel();
-        opacityLabel = new javax.swing.JTextField();
-        intensityLabel = new javax.swing.JTextField();
-        radiusLabel = new javax.swing.JTextField();
+        plotPanel = new JPanel();
+        labelGradMax = new JLabel();
+        labelGradMin = new JLabel();
+        labelMinVal = new JLabel();
+        labelMaxVal = new JLabel();
+        jLabel1 = new JLabel();
+        jLabel2 = new JLabel();
+        jLabel3 = new JLabel();
+        jLabel4 = new JLabel();
+        jLabel5 = new JLabel();
+        jLabel6 = new JLabel();
+        colorButton = new JButton();
+        jLabel7 = new JLabel();
+        opacityLabel = new JTextField();
+        intensityLabel = new JTextField();
+        radiusLabel = new JTextField();
 
-        javax.swing.GroupLayout plotPanelLayout = new javax.swing.GroupLayout(plotPanel);
+        GroupLayout plotPanelLayout = new GroupLayout(plotPanel);
         plotPanel.setLayout(plotPanelLayout);
         plotPanelLayout.setHorizontalGroup(
-            plotPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            plotPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
         plotPanelLayout.setVerticalGroup(
-            plotPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            plotPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 157, Short.MAX_VALUE)
         );
 
-        labelGradMax.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelGradMax.setHorizontalAlignment(SwingConstants.RIGHT);
         labelGradMax.setText("jLabel1");
 
-        labelGradMin.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelGradMin.setHorizontalAlignment(SwingConstants.RIGHT);
         labelGradMin.setText("jLabel2");
 
         labelMinVal.setText("jLabel3");
 
-        labelMaxVal.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        labelMaxVal.setHorizontalAlignment(SwingConstants.RIGHT);
         labelMaxVal.setText("jLabel4");
 
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jLabel1.setHorizontalAlignment(SwingConstants.LEFT);
         jLabel1.setText("Gradient");
 
         jLabel2.setText("magnitude");
@@ -163,104 +174,104 @@ public class TransferFunction2DEditor extends javax.swing.JPanel {
 
         jLabel6.setText("Color");
 
-        colorButton.setBounds(new java.awt.Rectangle(0, 0, 75, 29));
+        colorButton.setBounds(new Rectangle(0, 0, 75, 29));
         colorButton.addActionListener(this::colorButtonActionPerformed);
 
         jLabel7.setText("Radius");
 
         opacityLabel.setText("jTextField2");
-        opacityLabel.setMinimumSize(new java.awt.Dimension(84, 28));
+        opacityLabel.setMinimumSize(new Dimension(84, 28));
         opacityLabel.addActionListener(this::opacityLabelActionPerformed);
 
         intensityLabel.setEditable(false);
         intensityLabel.setText("jTextField1");
-        intensityLabel.setMinimumSize(new java.awt.Dimension(84, 28));
+        intensityLabel.setMinimumSize(new Dimension(84, 28));
 
         radiusLabel.setEditable(false);
         radiusLabel.setText("jTextField3");
-        radiusLabel.setMinimumSize(new java.awt.Dimension(84, 28));
+        radiusLabel.setMinimumSize(new Dimension(84, 28));
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(this);
+        GroupLayout layout = new GroupLayout(this);
         this.setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(16, 16, 16)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
+                    .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.TRAILING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 67, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addComponent(labelGradMin, javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addComponent(labelGradMax, javax.swing.GroupLayout.Alignment.TRAILING))
+                            .addComponent(jLabel1, GroupLayout.PREFERRED_SIZE, 67, GroupLayout.PREFERRED_SIZE))
+                        .addComponent(labelGradMin, GroupLayout.Alignment.TRAILING)
+                        .addComponent(labelGradMax, GroupLayout.Alignment.TRAILING))
                     .addComponent(jLabel4)
                     .addComponent(jLabel5)
                     .addComponent(jLabel6))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
                             .addComponent(labelMinVal)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(6, 6, 6)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(opacityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(intensityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addComponent(colorButton, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                                    .addComponent(opacityLabel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(intensityLabel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(colorButton, GroupLayout.Alignment.TRAILING, GroupLayout.PREFERRED_SIZE, 75, GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, 73, Short.MAX_VALUE)
+                        .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel3)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(labelMaxVal)
                                 .addContainerGap())
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(jLabel7)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(radiusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 84, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(radiusLabel, GroupLayout.PREFERRED_SIZE, 84, GroupLayout.PREFERRED_SIZE)
                                 .addGap(130, 130, 130))))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(plotPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(plotPanel, GroupLayout.DEFAULT_SIZE, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addContainerGap())))
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING, false)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(labelGradMax)
                         .addGap(45, 45, 45)
                         .addComponent(jLabel1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel2)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED, GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(labelGradMin))
-                    .addComponent(plotPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(plotPanel, GroupLayout.PREFERRED_SIZE, GroupLayout.DEFAULT_SIZE, GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(labelMaxVal, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(labelMaxVal, GroupLayout.PREFERRED_SIZE, 16, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel3)
                     .addComponent(labelMinVal))
                 .addGap(14, 14, 14)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(intensityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(intensityLabel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel7)
-                    .addComponent(radiusLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(radiusLabel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(opacityLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(colorButton, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel6, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(opacityLabel, GroupLayout.PREFERRED_SIZE, 28, GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+                    .addComponent(colorButton, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel6, GroupLayout.PREFERRED_SIZE, 29, GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
     }// </editor-fold>//GEN-END:initComponents
 
-    private void colorButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
+    private void colorButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_colorButtonActionPerformed
         // Change the color in the transfer function.
         Color newColor = JColorChooser.showDialog(this, "Choose color", colorButton.getBackground());
         if (newColor != null) {
@@ -273,7 +284,7 @@ public class TransferFunction2DEditor extends javax.swing.JPanel {
         }
     }//GEN-LAST:event_colorButtonActionPerformed
 
-    private void opacityLabelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_opacityLabelActionPerformed
+    private void opacityLabelActionPerformed(ActionEvent evt) {//GEN-FIRST:event_opacityLabelActionPerformed
        try {
             double value = Double.parseDouble(opacityLabel.getText());
             if (value < 0) {
@@ -305,21 +316,21 @@ public class TransferFunction2DEditor extends javax.swing.JPanel {
     }
 */
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton colorButton;
-    private javax.swing.JTextField intensityLabel;
-    private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel3;
-    private javax.swing.JLabel jLabel4;
-    private javax.swing.JLabel jLabel5;
-    private javax.swing.JLabel jLabel6;
-    private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel labelGradMax;
-    private javax.swing.JLabel labelGradMin;
-    private javax.swing.JLabel labelMaxVal;
-    private javax.swing.JLabel labelMinVal;
-    private javax.swing.JTextField opacityLabel;
-    private javax.swing.JPanel plotPanel;
-    private javax.swing.JTextField radiusLabel;
+    private JButton colorButton;
+    private JTextField intensityLabel;
+    private JLabel jLabel1;
+    private JLabel jLabel2;
+    private JLabel jLabel3;
+    private JLabel jLabel4;
+    private JLabel jLabel5;
+    private JLabel jLabel6;
+    private JLabel jLabel7;
+    private JLabel labelGradMax;
+    private JLabel labelGradMin;
+    private JLabel labelMaxVal;
+    private JLabel labelMinVal;
+    private JTextField opacityLabel;
+    private JPanel plotPanel;
+    private JTextField radiusLabel;
     // End of variables declaration//GEN-END:variables
 }

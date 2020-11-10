@@ -7,7 +7,11 @@ package gui;
 
 import com.jogamp.opengl.awt.GLJPanel;
 import java.awt.BorderLayout;
+import java.awt.EventQueue;
+import java.awt.event.ActionEvent;
 import java.io.File;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.*;
 import javax.swing.filechooser.FileFilter;
 import volume.Volume;
@@ -19,7 +23,7 @@ import volvis.Visualization;
  *
  * @author michel
  */
-public class VolVisApplication extends javax.swing.JFrame {
+public class VolVisApplication extends JFrame {
 
     Visualization visualization;
     Volume volume;
@@ -54,16 +58,16 @@ public class VolVisApplication extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        splitPane = new javax.swing.JSplitPane();
-        tabbedPanel = new javax.swing.JTabbedPane();
-        loadVolume = new javax.swing.JPanel();
-        loadButton = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        infoTextPane = new javax.swing.JTextPane();
-        renderPanel = new javax.swing.JPanel();
+        splitPane = new JSplitPane();
+        tabbedPanel = new JTabbedPane();
+        loadVolume = new JPanel();
+        loadButton = new JButton();
+        jScrollPane1 = new JScrollPane();
+        infoTextPane = new JTextPane();
+        renderPanel = new JPanel();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setExtendedState(JFrame.MAXIMIZED_BOTH);
 
         splitPane.setDividerLocation(600);
 
@@ -73,13 +77,13 @@ public class VolVisApplication extends javax.swing.JFrame {
         infoTextPane.setEditable(false);
         jScrollPane1.setViewportView(infoTextPane);
 
-        javax.swing.GroupLayout loadVolumeLayout = new javax.swing.GroupLayout(loadVolume);
+        GroupLayout loadVolumeLayout = new GroupLayout(loadVolume);
         loadVolume.setLayout(loadVolumeLayout);
         loadVolumeLayout.setHorizontalGroup(
-            loadVolumeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            loadVolumeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(loadVolumeLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(loadVolumeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(loadVolumeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
                     .addGroup(loadVolumeLayout.createSequentialGroup()
                         .addComponent(loadButton)
@@ -87,12 +91,12 @@ public class VolVisApplication extends javax.swing.JFrame {
                 .addContainerGap())
         );
         loadVolumeLayout.setVerticalGroup(
-            loadVolumeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            loadVolumeLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGroup(loadVolumeLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(loadButton)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
+                .addPreferredGap(LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jScrollPane1, GroupLayout.DEFAULT_SIZE, 520, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -100,36 +104,36 @@ public class VolVisApplication extends javax.swing.JFrame {
 
         splitPane.setRightComponent(tabbedPanel);
 
-        javax.swing.GroupLayout renderPanelLayout = new javax.swing.GroupLayout(renderPanel);
+        GroupLayout renderPanelLayout = new GroupLayout(renderPanel);
         renderPanel.setLayout(renderPanelLayout);
         renderPanelLayout.setHorizontalGroup(
-            renderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            renderPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 598, Short.MAX_VALUE)
         );
         renderPanelLayout.setVerticalGroup(
-            renderPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            renderPanelLayout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addGap(0, 619, Short.MAX_VALUE)
         );
 
         splitPane.setLeftComponent(renderPanel);
 
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        GroupLayout layout = new GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
+            .addGroup(GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(splitPane)
                 .addContainerGap())
         );
         layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            layout.createParallelGroup(GroupLayout.Alignment.LEADING)
             .addComponent(splitPane)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void loadButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
+    private void loadButtonActionPerformed(ActionEvent evt) {//GEN-FIRST:event_loadButtonActionPerformed
         JFileChooser fc = new JFileChooser(System.getProperty("user.dir"));
         fc.setFileFilter(new FileFilter() {
 
@@ -183,27 +187,27 @@ public class VolVisApplication extends javax.swing.JFrame {
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
          */
         try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+            for (UIManager.LookAndFeelInfo info : UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+                    UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(VolVisApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            Logger.getLogger(VolVisApplication.class.getName()).log(Level.SEVERE, null, ex);
         }
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VolVisApplication().setVisible(true));
+        EventQueue.invokeLater(() -> new VolVisApplication().setVisible(true));
     }
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JTextPane infoTextPane;
-    private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JButton loadButton;
-    private javax.swing.JPanel loadVolume;
-    private javax.swing.JPanel renderPanel;
-    private javax.swing.JSplitPane splitPane;
-    private javax.swing.JTabbedPane tabbedPanel;
+    private JTextPane infoTextPane;
+    private JScrollPane jScrollPane1;
+    private JButton loadButton;
+    private JPanel loadVolume;
+    private JPanel renderPanel;
+    private JSplitPane splitPane;
+    private JTabbedPane tabbedPanel;
     // End of variables declaration//GEN-END:variables
 }
