@@ -7,13 +7,13 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import gui.RaycastRendererPanel;
 import gui.TransferFunction2DEditor;
 import gui.TransferFunctionEditor;
-import java.awt.image.BufferedImage;
-
 import util.TFChangeListener;
 import util.VectorMath;
 import volume.GradientVolume;
 import volume.Volume;
 import volume.VoxelGradient;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Raycast Renderer.
@@ -176,9 +176,51 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @return The voxel value.
      */
     private short getVoxelTrilinear(double[] coord) {
-        // TODO 1: Implement Tri-Linear interpolation and use it in your code
-        // instead of getVoxel().
-        return 0;
+        double x = coord[0];
+        double y = coord[1];
+        double z = coord[2];
+
+        //the 8 voxels are created from these 6 coordinates (x0, x1, y0, y1, z0, z1)
+        int x0 = (int) Math.floor(x);
+        int y0 = (int) Math.floor(y);
+        int z0 = (int) Math.floor(z);
+
+        int x1 = (int) Math.ceil(x);
+        int y1 = (int) Math.ceil(y);
+        int z1 = (int) Math.ceil(z);
+
+        // Verify they are inside the volume
+        if (x0 < 0 || x0 >= volume.getDimX() || x1 < 0 || x1 >= volume.getDimX() ||
+                y0 < 0 || y0 >= volume.getDimY() || y1 < 0 || y1 >= volume.getDimY() ||
+                z0 < 0 || z0 >= volume.getDimZ() || z1 < 0 || z1 >= volume.getDimZ()) {
+
+            // If not, just return 0
+            return 0;
+        }
+
+        double dx = (x - x0) / (x1 - x0);
+        double dy = (y - y0) / (y1 - y0);
+        double dz = (z - z0) / (z1 - z0);
+
+        // thanks wikipedia
+        short c000 = volume.getVoxel(x0, y0, z0);
+        short c001 = volume.getVoxel(x0, y0, z1);
+        short c010 = volume.getVoxel(x0, y1, z0);
+        short c011 = volume.getVoxel(x0, y1, z1);
+        short c100 = volume.getVoxel(x1, y0, z0);
+        short c101 = volume.getVoxel(x1, y0, z1);
+        short c110 = volume.getVoxel(x1, y1, z0);
+        short c111 = volume.getVoxel(x1, y1, z1);
+
+        double c00 = c000 * (1 - dx) + c100 * dx;
+        double c01 = c001 * (1 - dx) + c101 * dx;
+        double c10 = c010 * (1 - dx) + c110 * dx;
+        double c11 = c011 * (1 - dx) + c111 * dx;
+
+        double c0 = c00 * (1 - dy) + c10 * dy;
+        double c1 = c01 * (1 - dy) + c11 * dy;
+
+        return (short) (c0 * (1 - dz) + c1 * dz);
     }
 
     /**
@@ -244,7 +286,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         VectorMath.setVector(uVec, viewMatrix[0], viewMatrix[4], viewMatrix[8]);
         VectorMath.setVector(vVec, viewMatrix[1], viewMatrix[5], viewMatrix[9]);
 
-        // We get the size of the image/texture we will be puting the result of the 
+        // We get the size of the image/texture we will be putting the result of the
         // volume rendering operation.
         int imageW = image.getWidth();
         int imageH = image.getHeight();
@@ -270,9 +312,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
                 // computes the pixelCoord which contains the 3D coordinates of the pixels (i,j)
                 computePixelCoordinatesFloat(pixelCoord, volumeCenter, uVec, vVec, i, j);
 
-                int val = getVoxel(pixelCoord);
-                //NOTE: you have to implement this function to get the tri-linear interpolation
-                //int val = getVoxelTrilinear(pixelCoord);
+                int val = getVoxelTrilinear(pixelCoord);
 
                 // Map the intensity to a grey value by linear scaling
                 pixelColor.r = val / max;
@@ -318,7 +358,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
 
         double maximum = 0;
         do {
-            double value = getVoxel(currentPos) / 255.;
+            double value = getVoxelTrilinear(currentPos) / 255.;
             if (value > maximum) {
                 maximum = value;
             }
