@@ -7,13 +7,13 @@ import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
 import gui.RaycastRendererPanel;
 import gui.TransferFunction2DEditor;
 import gui.TransferFunctionEditor;
-import java.awt.image.BufferedImage;
-
 import util.TFChangeListener;
 import util.VectorMath;
 import volume.GradientVolume;
 import volume.Volume;
 import volume.VoxelGradient;
+
+import java.awt.image.BufferedImage;
 
 /**
  * Raycast Renderer.
