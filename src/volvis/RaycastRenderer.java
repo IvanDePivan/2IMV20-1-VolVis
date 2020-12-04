@@ -182,7 +182,6 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         return result;
     }
     private float getVoxelTrilinear(double[] coord) {
-        // TODO 1: Implement Tri-Linear interpolation and use it in your code
         if (coord[0] < 0 || coord[0] > (volume.getDimX()-2) || coord[1] < 0 || coord[1] > (volume.getDimY()-2)
                 || coord[2] < 0 || coord[2] > (volume.getDimZ()-2)) {
             return 0;
@@ -244,7 +243,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
 
 
     private VoxelGradient getGradientTrilinear(double[] coord) {
-        // TODO 6: Implement Tri-linear interpolation for gradients
+
         if (coord[0] < 0 || coord[0] > (volume.getDimX()-2) || coord[1] < 0 || coord[1] > (volume.getDimY()-2)
                 || coord[2] < 0 || coord[2] > (volume.getDimZ()-2)) {
             return zero;
