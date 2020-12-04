@@ -21,8 +21,10 @@ public class GradientVolume {
     }
 
     public VoxelGradient getGradient(int x, int y, int z) {
+
         return data[x + dimX * (y + dimY * z)];
     }
+
 
     public void setGradient(int x, int y, int z, VoxelGradient value) {
         data[x + dimX * (y + dimY * z)] = value;

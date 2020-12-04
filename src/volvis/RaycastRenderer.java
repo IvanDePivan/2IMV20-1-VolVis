@@ -175,10 +175,36 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param coord Pixel coordinate in 3D space of the voxel we want to get.
      * @return The voxel value.
      */
-    private short getVoxelTrilinear(double[] coord) {
+
+    private VoxelGradient zero = new VoxelGradient();
+    private float interpolateVoxel(float g0, float g1, float factor) {
+        float result = (1 - factor)*g0 + factor*g1;
+        return result;
+    }
+    private float getVoxelTrilinear(double[] coord) {
         // TODO 1: Implement Tri-Linear interpolation and use it in your code
-        // instead of getVoxel().
-        return 0;
+        if (coord[0] < 0 || coord[0] > (volume.getDimX()-2) || coord[1] < 0 || coord[1] > (volume.getDimY()-2)
+                || coord[2] < 0 || coord[2] > (volume.getDimZ()-2)) {
+            return 0;
+        }
+        /* notice that in this framework we assume that the distance between neighbouring voxels is 1 in all directions*/
+        int x = (int) Math.floor(coord[0]);
+        int y = (int) Math.floor(coord[1]);
+        int z = (int) Math.floor(coord[2]);
+
+        float fac_x = (float) coord[0] - x;
+        float fac_y = (float) coord[1] - y;
+        float fac_z = (float) coord[2] - z;
+
+        float t0 = interpolateVoxel(volume.getVoxel(x, y, z), volume.getVoxel(x+1, y, z), fac_x);
+        float t1 = interpolateVoxel(volume.getVoxel(x, y +1, z), volume.getVoxel(x+1, y+1, z), fac_x);
+        float t2 = interpolateVoxel(volume.getVoxel(x, y, z+1), volume.getVoxel(x+1, y, z+1), fac_x);
+        float t3 = interpolateVoxel(volume.getVoxel(x, y+1, z+1), volume.getVoxel(x+1, y+1, z+1), fac_x);
+        float t4 = interpolateVoxel(t0, t1, fac_y);
+        float t5 = interpolateVoxel(t2, t3, fac_y);
+        float t6 = interpolateVoxel(t4, t5, fac_z);
+
+        return t6;
     }
 
     /**
@@ -215,9 +241,43 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param coord Pixel coordinate in 3D space of the voxel we want to get.
      * @return The voxel gradient.
      */
+
+
     private VoxelGradient getGradientTrilinear(double[] coord) {
         // TODO 6: Implement Tri-linear interpolation for gradients
-        return ZERO_GRADIENT;
+        if (coord[0] < 0 || coord[0] > (volume.getDimX()-2) || coord[1] < 0 || coord[1] > (volume.getDimY()-2)
+                || coord[2] < 0 || coord[2] > (volume.getDimZ()-2)) {
+            return zero;
+        }
+        /* notice that in this framework we assume that the distance between neighbouring voxels is 1 in all directions*/
+        int x = (int) Math.floor(coord[0]);
+        int y = (int) Math.floor(coord[1]);
+        int z = (int) Math.floor(coord[2]);
+
+        float fac_x = (float) coord[0] - x;
+        float fac_y = (float) coord[1] - y;
+        float fac_z = (float) coord[2] - z;
+
+        VoxelGradient r0,r1,r2,r3,r4,r5,r6;
+        r0=r1=r2=r3=r4=r5=r6= new VoxelGradient();
+
+        interpolate(gradients.getGradient(x, y, z), gradients.getGradient(x+1, y, z), fac_x, r0);
+        interpolate(gradients.getGradient(x, y+1, z), gradients.getGradient(x+1, y+1, z), fac_x, r1);
+        interpolate(gradients.getGradient(x, y, z+1), gradients.getGradient(x+1, y, z+1), fac_x, r2);
+        interpolate(gradients.getGradient(x, y+1, z+1), gradients.getGradient(x+1, y+1, z+1), fac_x, r3);
+        interpolate(r0, r1, fac_y, r4);
+        interpolate(r2, r3, fac_y, r5);
+        interpolate(r4, r5, fac_z, r6);
+
+        return r6;
+
+    }
+    private void interpolate(VoxelGradient g0, VoxelGradient g1, float factor, VoxelGradient result) {
+
+        result.x = g1.x*factor+g0.x*(1-factor);
+        result.y = g1.y*factor+g0.y*(1-factor);
+        result.z = g1.z*factor+g0.z*(1-factor);
+        result.mag = (float) Math.sqrt(result.x * result.x + result.y * result.y + result.z * result.z);
     }
 
     /**
@@ -395,7 +455,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         double[] lightVector = new double[3];
 
         //the light vector is directed toward the view point (which is the source of the light)
-        // another light vector would be possible 
+        // another light vector would be possible
         VectorMath.setVector(lightVector, rayVector[0], rayVector[1], rayVector[2]);
 
         //Initialization of the colors as floating point values
@@ -407,15 +467,29 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         TFColor voxel_color = new TFColor();
         TFColor colorAux = new TFColor();
 
+        //compute phong shading
+        boolean shade = false;
+        if (shadingMode) {
+            shade = true;
+        }
+
+        //compute the increment and the number of samples
+        double[] increments = new double[3];
+        VectorMath.setVector(increments, rayVector[0] * sampleStep, rayVector[1] * sampleStep, rayVector[2] * sampleStep);
+
+        // Compute the number of times we need to sample
+        double distance = VectorMath.distance(entryPoint, exitPoint);
+        int nrSamples = 1 + (int) Math.floor(distance / sampleStep);
+
+        //the current position is initialized as the entry point
+        double[] currentPos = new double[3];
+        VectorMath.setVector(currentPos, entryPoint[0], entryPoint[1], entryPoint[2]);
         // TODO 2: To be Implemented this function. Now, it just gives back a constant color depending on the mode
         switch (modeFront) {
             case COMPOSITING:
-                // 1D transfer function 
-                voxel_color.r = 1;
-                voxel_color.g = 0;
-                voxel_color.b = 0;
-                voxel_color.a = 1;
-                opacity = 1;
+                colorAux = compositeCalculationRGB(nrSamples, currentPos, increments, lightVector, rayVector, shade, false);
+                voxel_color.r = colorAux.r; voxel_color.g = colorAux.g; voxel_color.b = colorAux.b;
+                opacity = 1; //needs to be otherwise too transparent;
                 break;
             case TRANSFER2D:
                 // 2D transfer function 
@@ -444,6 +518,45 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         //computes the color
         int color = computePackedPixelColor(r, g, b, alpha);
         return color;
+    }
+
+    TFColor compositeCalculationRGB(int nrSamples, double[] currentPos, double[] increments, double[] lightVector, double[] rayVector, boolean shade, boolean twoD){
+        TFColor voxel_color = new TFColor();
+        double value =  getVoxelTrilinear(currentPos);
+        int intValue = (int) value;
+        // get transfer function value at current position
+        TFColor colorAux = tFuncFront.getColor(intValue);
+        if(twoD){//compute opacity with 2d transfer function
+            colorAux.a = computeOpacity2DTF(1, 1, intValue, getGradient(currentPos).mag);
+        }
+        VoxelGradient voxGrad = getGradient(currentPos);
+        //if phong shading is active then compute phong shaded color value
+        if(shade)
+            colorAux = computePhongShading(colorAux, voxGrad, lightVector, rayVector);
+        if(twoD){//compute opacity with 2d transfer function
+            colorAux.a = computeOpacity2DTF(1, 1, intValue, getGradient(currentPos).mag);
+        }
+        //move forwards along the ray
+        for (int i = 0; i < 3; i++) {
+            currentPos[i] += increments[i];
+        }
+        nrSamples--;
+
+        //when at the end of the samples or 'more or less nat full opacity level'
+        if(nrSamples == 0 || colorAux.a > 0.99){
+            voxel_color.r = colorAux.r * colorAux.a;
+            voxel_color.b = colorAux.b * colorAux.a;
+            voxel_color.g = colorAux.g * colorAux.a;
+            //lowest level return
+            return voxel_color;
+        }
+        //recursive call
+        TFColor nextVoxelColor = compositeCalculationRGB(nrSamples, currentPos, increments, lightVector, rayVector, shade, twoD);
+        //the compositing formula
+        voxel_color.r = colorAux.r * colorAux.a + (1 - colorAux.a) * nextVoxelColor.r;
+        voxel_color.b = colorAux.b * colorAux.a + (1 - colorAux.a) * nextVoxelColor.b;
+        voxel_color.g = colorAux.g * colorAux.a + (1 - colorAux.a) * nextVoxelColor.g;
+        return voxel_color;
     }
 
     /**
