@@ -624,7 +624,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @return Computed color for Phong Shading.
      */
     private TFColor computePhongShading(TFColor voxel_color, VoxelGradient gradient, double[] lightVector,
-            double[] rayVector) {
+                                        double[] rayVector) {
 
         // TODO 7: Implement Phong Shading.
         //if no gradient magnitude return transparent - a 'reflective surface' will always have a not-null gradient magnitude
@@ -736,7 +736,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         VectorMath.setVector(uVec, viewMatrix[0], viewMatrix[4], viewMatrix[8]);
         VectorMath.setVector(vVec, viewMatrix[1], viewMatrix[5], viewMatrix[9]);
 
-        // We get the size of the image/texture we will be puting the result of the 
+        // We get the size of the image/texture we will be putting the result of the
         // volume rendering operation.
         int imageW = image.getWidth();
         int imageH = image.getHeight();
@@ -764,21 +764,17 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
                 // compute the entry and exit point of the ray
                 computeEntryAndExit(pixelCoord, rayVector, entryPoint, exitPoint);
 
+                // Determine which side of the plane the current ray is going to be
+                // Direct the code accordingly
                 // TODO 9: Implement logic for cutting plane.
                 if ((entryPoint[0] > -1.0) && (exitPoint[0] > -1.0)) {
                     int val = 0;
-                    switch (modeFront) {
-                        case COMPOSITING:
-                        case TRANSFER2D:
-                            val = traceRayComposite(entryPoint, exitPoint, rayVector, sampleStep);
-                            break;
-                        case MIP:
-                            val = traceRayMIP(entryPoint, exitPoint, rayVector, sampleStep);
-                            break;
-                        case ISO_SURFACE:
-                            val = traceRayIso(entryPoint, exitPoint, rayVector, sampleStep);
-                            break;
+                    if (cuttingPlaneMode && !isFrontSlice(entryPoint)) {
+                        val = traceRay(entryPoint, exitPoint, sampleStep, rayVector, val, modeBack);
+                    } else {
+                        val = traceRay(entryPoint, exitPoint, sampleStep, rayVector, val, modeFront);
                     }
+
                     for (int ii = i; ii < i + increment; ii++) {
                         for (int jj = j; jj < j + increment; jj++) {
                             image.setRGB(ii, jj, val);
@@ -788,6 +784,30 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
 
             }
         }
+    }
+
+    private int traceRay(double[] entryPoint, double[] exitPoint, int sampleStep, double[] rayVector, int val, RaycastMode mode) {
+        switch (mode) {
+            case COMPOSITING:
+            case TRANSFER2D:
+                val = traceRayComposite(entryPoint, exitPoint, rayVector, sampleStep);
+                break;
+            case MIP:
+                val = traceRayMIP(entryPoint, exitPoint, rayVector, sampleStep);
+                break;
+            case ISO_SURFACE:
+                val = traceRayIso(entryPoint, exitPoint, rayVector, sampleStep);
+                break;
+        }
+        return val;
+    }
+
+    private boolean isFrontSlice(double[] pointCoord) {
+        double[] intersectionPoint = new double[3];
+        intersectLinePlane(planePoint, planeNorm, pointCoord, planeNorm, intersectionPoint);
+        double[] difference = new double[3];
+        VectorMath.difference(pointCoord, intersectionPoint, difference);
+        return VectorMath.dotproduct(difference, planeNorm) > 0;
     }
 
     /**
