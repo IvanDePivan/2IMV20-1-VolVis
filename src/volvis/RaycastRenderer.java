@@ -1,7 +1,6 @@
 package volvis;
 
 import com.jogamp.opengl.GL;
-import com.jogamp.opengl.math.VectorUtil;
 import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.util.texture.Texture;
 import com.jogamp.opengl.util.texture.awt.AWTTextureIO;
@@ -564,11 +563,6 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
                 opacity = colorAux.a;
                 break;
         }
-       // boolean shade = false;
-        //if (shadingMode) {
-            // Shading mode on
-            //shade=true;
-        //}
 
         r = voxel_color.r;
         g = voxel_color.g;
@@ -633,69 +627,73 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
             double[] rayVector) {
 
         // TODO 7: Implement Phong Shading.
-        //TFColor color = new TFColor(0, 0, 0, 1);
-
-
         //if no gradient magnitude return transparent - a 'reflective surface' will always have a not-null gradient magnitude
-        if(gradient.mag == 0){
+        if (gradient.mag == 0) {
             return new TFColor(0, 0, 0, 0);
         }
 
         //reflectiveness constants
-        float ka = 0.1f;//ambient
-        float kd = 0.7f;//diffuse
-        float ks = 0.2f;//specular
-        float a = 100;
+        double ka = 0.1;//ambient
+        double kd = 0.7;//diffuse
+        double ks = 0.2;//specular
+        double a = 100; // opacity
 
 
         //formula implemented:
         //intensity = ka*ia + kd*(L^ dot N^ )*id + ks*(r^ dot v^)^a*is;
 
         //set the colors; compute the 3 bands separately
-        float ir =  (float) voxel_color.r;
-        float ig = (float) voxel_color.g;
-        float ib = (float) voxel_color.b;
+        double ir = voxel_color.r;
+        double ig = voxel_color.g;
+        double ib = voxel_color.b;
 
         //setup the necessary variables
-        float[] toLight = {(float) -lightVector[0], (float) -lightVector[1], (float) -lightVector[2]};
-        float[] toLightN = VectorUtil.normalizeVec3(toLight);
+        double[] toLightN = new double[3];
+        VectorMath.normalize(lightVector, toLightN);
 
-        float[] toView = {(float) -rayVector[0], (float) - rayVector[1], (float) -rayVector[2]};
-        float[] toViewN = VectorUtil.normalizeVec3(toView);
+        double[] toView = {-rayVector[0], -rayVector[1], -rayVector[2]};
+        double[] toViewN = new double[3];
+        VectorMath.normalize(toView, toViewN);
 
-        float[] normal = {-gradient.x, -gradient.y, -gradient.z};
-        float[] normalN = VectorUtil.normalizeVec3(normal);
+        double[] normalN = new double[3];
+        double[] normal = {-gradient.x, -gradient.y, -gradient.z};
+        VectorMath.normalize(normal, normalN);
 
 
         //compute light reflection
-        float[] scaled = new float[3];
-        float dotp = VectorUtil.dotVec3(toLightN, normalN);
-        VectorUtil.scaleVec3(scaled, normalN, 2*dotp);
+        double[] scaled = new double[3];
+        double dotp = VectorMath.dotproduct(toLightN, normalN);
+        double lambertian = Math.max(dotp, 0.0);
+
+
+        VectorMath.multiply(normalN, 2 * dotp, scaled);
+
         // rN is the the direction taken by a perfect reflection of the light source on the surface
-        float[] rN = new float[3];
-        VectorUtil.subVec3(rN, scaled, toLightN);
+        double[] rN = new double[3];
+        VectorMath.difference(scaled, toLightN, rN);
 
         //store ambient color
-        float r_ambient = ka * ir;
-        float g_ambient = ka * ig;
-        float b_ambient = ka * ib;
+        double r_ambient = ka * ir;
+        double g_ambient = ka * ig;
+        double b_ambient = ka * ib;
 
         //check if normal is in correct direction, if light is orthogonal(or larger angle) to the surface only use ambient lighting
-        if(Math.toDegrees(VectorUtil.angleVec3(toLight, normal)) >= 90){
-            return new TFColor(r_ambient,g_ambient,b_ambient,voxel_color.a);
+        if (lambertian <= 0.0) {
+            return new TFColor(r_ambient, g_ambient, b_ambient, voxel_color.a);
         }
 
         //store diffuse color
-        float r_diffuse = kd * VectorUtil.dotVec3(toLightN, normalN) * ir;
-        float g_diffuse = kd * VectorUtil.dotVec3(toLightN, normalN) * ig;
-        float b_diffuse = kd * VectorUtil.dotVec3(toLightN, normalN) * ib;
+        double r_diffuse = kd * dotp * ir;
+        double g_diffuse = kd * dotp * ig;
+        double b_diffuse = kd * dotp * ib;
 
         //final step in computing the specular light reflection
-        float specPow =  (float) Math.pow(VectorUtil.dotVec3(rN, toViewN), a);
+        double specAngle = VectorMath.dotproduct(rN, toViewN);
+        double specPow = Math.pow(specAngle, a);
         //store specular color
-        float r_specular = ks * specPow * ir;
-        float g_specular = ks * specPow * ig;
-        float b_specular = ks * specPow * ib;
+        double r_specular = ks * specPow * ir;
+        double g_specular = ks * specPow * ig;
+        double b_specular = ks * specPow * ib;
 
         //store the final color
         double newColorR = r_ambient + r_diffuse + r_specular;
@@ -703,9 +701,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         double newColorB = b_ambient + b_diffuse + b_specular;
 
         //keep transparency of color passed as argument
-        TFColor resultColor = new TFColor(newColorR,newColorG,newColorB,voxel_color.a);
-
-        return resultColor;
+        return new TFColor(newColorR, newColorG, newColorB, voxel_color.a);
     }
 
     /**
