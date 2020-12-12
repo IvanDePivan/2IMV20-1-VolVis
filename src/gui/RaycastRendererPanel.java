@@ -4,13 +4,12 @@
  */
 package gui;
 
-import javax.swing.JCheckBox;
-import javax.swing.JColorChooser;
-import javax.swing.JOptionPane;
 import volvis.RaycastMode;
 import volvis.RaycastRenderer;
 import volvis.TFColor;
-import java.awt.Color;
+
+import javax.swing.*;
+import java.awt.*;
 
 /**
  *
