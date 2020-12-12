@@ -269,6 +269,48 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
 
 
     /**
+     * Finds a more accurate point in space where the isoValue is crossed
+     *
+     * @param currentPos
+     * @param increments
+     * @param minSampleStep
+     * @param value
+     * @param isoValue
+     * @return
+     */
+    private double[] bisectionAccuracy(double[] currentPos, double[] increments, double minSampleStep, double value, float isoValue) {
+        //get value halfway between currentPos and currentPos-increments
+        VectorMath.setVector(increments, increments[0] / 2, increments[1] / 2, increments[2] / 2);
+
+        //set currentPos halfway between previousPos and currentPos
+        double[] maxPos = currentPos; // TODO what does maxPos do here?
+        for (int i = 0; i < 3; i++) {
+            currentPos[i] -= increments[i];
+        }
+
+        //once the step is small enough, return the found position
+        if (increments[0] < minSampleStep) {
+            //return position
+            return currentPos;
+        }
+
+        //get value at mid point
+        value = volume.getVoxelTrilinear(currentPos);
+
+        //mid value >= isoValue - > go left (smaller values)
+        if (value >= isoValue) {
+            return bisectionAccuracy(currentPos, increments, minSampleStep, value, isoValue);
+        }
+
+        //mid value < isoValue -> go right (larger values)
+        if (value < isoValue) {
+            return bisectionAccuracy(maxPos, increments, minSampleStep, value, isoValue);
+        }
+        //should not be possible to reach this line
+        return currentPos;
+    }
+
+    /**
      * Updates {@link #image} attribute (result of rendering) using the
      * Isosurface raycasting. It returns the color assigned to a ray/pixel given
      * its starting and ending points, and the direction of the ray.
@@ -292,6 +334,10 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
             isoThreshold = value - isoValue;
 
             if (isoThreshold >= 0) {
+                //get more accurate position with bisection accuracy:
+                double minSampleStep = 0.01;
+                currentPos = bisectionAccuracy(currentPos, increments, minSampleStep, value, isoValue);
+
                 // isoColor contains the isosurface color from the interface
                 r = isoColor.r;
                 g = isoColor.g;
