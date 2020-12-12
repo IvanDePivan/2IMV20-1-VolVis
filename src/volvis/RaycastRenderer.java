@@ -276,7 +276,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param minSampleStep
      * @param value
      * @param isoValue
-     * @return
+     * @return the updated position
      */
     private double[] bisectionAccuracy(double[] currentPos, double[] increments, double minSampleStep, double value, float isoValue) {
         //get value halfway between currentPos and currentPos-increments
