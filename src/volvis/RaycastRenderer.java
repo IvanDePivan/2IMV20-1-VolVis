@@ -392,14 +392,14 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         }
 
         //calculate gradient magnitude and intensity of current voxel
-        VoxelGradient voxelGradient = gradients.getGradientTrilinear(currentPos); //TODO maybe set it back
+        VoxelGradient voxelGradient = gradients.getGradientTrilinear(currentPos);
         double voxelIntensity = volume.getVoxelTrilinear(currentPos);
 
         //calculate opacity of current voxel
         double opacity = computeOpacity2DTF(function2D.baseIntensity, function2D.radius, voxelIntensity, voxelGradient.mag);
 
         //composite current opacity and previous voxel component
-        color = compositeColors2D(function2D.color, color, voxelIntensity, opacity);
+        color = compositeColors2D(function2D.color, color, opacity);
 
         //increment position
         for (int i = 0; i < 3; i++) {
@@ -409,14 +409,12 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         return computeTF2DColor(function2D, color, currentPos, increments, nrSamples - 1);
     }
 
-    // TODO why does this function have a parameter for intensity and not use it?
-    public TFColor compositeColors2D(TFColor functionColor, TFColor color, double intensityNextVoxel, double opacityNextVoxel) {
+    public TFColor compositeColors2D(TFColor functionColor, TFColor color, double opacityNextVoxel) {
         //update color with voxel component
         color.r += (1 - color.a) * functionColor.r * opacityNextVoxel;
         color.g += (1 - color.a) * functionColor.g * opacityNextVoxel;
         color.b += (1 - color.a) * functionColor.b * opacityNextVoxel;
-
-        color.a += (1 - color.a) * opacityNextVoxel;
+        color.a += (1 - color.a) * functionColor.a * opacityNextVoxel;
 
         return color;
     }
@@ -657,7 +655,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
                 color = traceRayIso(currentPos, increments, nrSamples, isFrontMode);
                 break;
         }
-        if (shadingMode) {
+        if (shadingMode && (mode.equals(RaycastMode.COMPOSITING) || mode.equals(RaycastMode.ISO_SURFACE))) {
             TFColor currentColor = new TFColor(color.r, color.g, color.b, color.a);
             VoxelGradient voxGrad = gradients.getGradientTrilinear(currentPos);
             color = computePhongShading(currentColor, voxGrad, lightVector, rayVector);
