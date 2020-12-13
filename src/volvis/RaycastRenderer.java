@@ -283,7 +283,7 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         VectorMath.setVector(increments, increments[0] / 2, increments[1] / 2, increments[2] / 2);
 
         //set currentPos halfway between previousPos and currentPos
-        double[] maxPos = currentPos; // TODO what does maxPos do here?
+        double[] maxPos = currentPos;
         for (int i = 0; i < 3; i++) {
             currentPos[i] -= increments[i];
         }
@@ -462,55 +462,55 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
                                         double[] rayVector) {
 
         // TODO 7: Implement Phong Shading.
-        //if no gradient magnitude return transparent - a 'reflective surface' will always have a not-null gradient magnitude
+        //a 'reflective surface' will always have a not-null gradient magnitude
         if (gradient.mag == 0) {
             return voxelColor;
         }
 
         //reflectiveness constants
-        double ambientFactor = 0.1;//ambient
-        double diffuseFactor = 0.7;//diffuse
-        double specularFactor = 0.2;//specular
-        double alpha = 100; // opacity
+        double ambientFactor = 0.1;
+        double diffuseFactor = 0.7;
+        double specularFactor = 0.2;
+        double alpha = 50;
 
 
         //formula implemented:
         //intensity = ambientFactor*ia + diffuseFactor*(L^ dot N^ )*id + specularFactor*(r^ dot v^)^a*is;
 
         //set the colors; compute the 3 bands separately
-        double ir = voxelColor.r;
-        double ig = voxelColor.g;
-        double ib = voxelColor.b;
+        double rVoxel = voxelColor.r;
+        double gVoxel = voxelColor.g;
+        double bVoxel = voxelColor.b;
 
         //setup the necessary variables
-        double[] toLightN = new double[3];
-        VectorMath.normalize(lightVector, toLightN);
+        double[] toLightNormal = new double[3];
+        VectorMath.normalize(lightVector, toLightNormal);
 
         double[] toView = {rayVector[0], rayVector[1], rayVector[2]};
-        double[] toViewN = new double[3];
-        VectorMath.normalize(toView, toViewN);
+        double[] toViewNormal = new double[3];
+        VectorMath.normalize(toView, toViewNormal);
 
-        double[] normalN = new double[3];
-        double[] normal = {-gradient.x, -gradient.y, -gradient.z};
-        VectorMath.normalize(normal, normalN);
+        double[] gradientNormal = new double[3];
+        double[] invertGradient = {-gradient.x, -gradient.y, -gradient.z};
+        VectorMath.normalize(invertGradient, gradientNormal);
 
 
         //compute light reflection
         double[] scaled = new double[3];
-        double dotProduct = VectorMath.dotproduct(toLightN, normalN);
+        double dotProduct = VectorMath.dotproduct(toLightNormal, gradientNormal);
         double lambertian = Math.max(dotProduct, 0.0);
 
 
-        VectorMath.multiply(normalN, 2 * dotProduct, scaled);
+        VectorMath.multiply(gradientNormal, 2 * dotProduct, scaled);
 
-        // rN is the the direction taken by a perfect reflection of the light source on the surface
-        double[] rN = new double[3];
-        VectorMath.difference(scaled, toLightN, rN);
+        // reflectionNormal is the the direction taken by a perfect reflection of the light source on the surface
+        double[] reflectionNormal = new double[3];
+        VectorMath.difference(scaled, toLightNormal, reflectionNormal);
 
         //store ambient color
-        double rAmbient = ambientFactor * ir;
-        double gAmbient = ambientFactor * ig;
-        double bAmbient = ambientFactor * ib;
+        double rAmbient = ambientFactor * rVoxel;
+        double gAmbient = ambientFactor * gVoxel;
+        double bAmbient = ambientFactor * bVoxel;
 
         //check if normal is in correct direction, if light is orthogonal(or larger angle) to the surface only use ambient lighting
         if (lambertian <= 0.0) {
@@ -518,17 +518,17 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         }
 
         //store diffuse color
-        double rDiffuse = diffuseFactor * dotProduct * ir;
-        double gDiffuse = diffuseFactor * dotProduct * ig;
-        double bDiffuse = diffuseFactor * dotProduct * ib;
+        double rDiffuse = diffuseFactor * dotProduct * rVoxel;
+        double gDiffuse = diffuseFactor * dotProduct * gVoxel;
+        double bDiffuse = diffuseFactor * dotProduct * bVoxel;
 
         //final step in computing the specular light reflection
-        double specAngle = VectorMath.dotproduct(rN, toViewN);
+        double specAngle = VectorMath.dotproduct(reflectionNormal, toViewNormal);
         double specPow = Math.pow(specAngle, alpha);
         //store specular color
-        double rSpecular = specularFactor * specPow * ir;
-        double gSpecular = specularFactor * specPow * ig;
-        double bSpecular = specularFactor * specPow * ib;
+        double rSpecular = specularFactor * specPow * rVoxel;
+        double gSpecular = specularFactor * specPow * gVoxel;
+        double bSpecular = specularFactor * specPow * bVoxel;
 
         //store the final color
         double newColorR = rAmbient + rDiffuse + rSpecular;
