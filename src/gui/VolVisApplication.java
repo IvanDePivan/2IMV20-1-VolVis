@@ -6,17 +6,16 @@ package gui;
  */
 
 import com.jogamp.opengl.awt.GLJPanel;
-import java.awt.BorderLayout;
-import java.io.File;
-import javax.swing.JFileChooser;
-import javax.swing.filechooser.FileFilter;
 import volume.Volume;
-import volvis.RaycastMode;
 import volvis.RaycastRenderer;
 import volvis.Visualization;
 
+import javax.swing.*;
+import javax.swing.filechooser.FileFilter;
+import java.awt.*;
+import java.io.File;
+
 /**
- *
  * @author michel
  */
 public class VolVisApplication extends javax.swing.JFrame {
@@ -44,6 +43,10 @@ public class VolVisApplication extends javax.swing.JFrame {
         visualization.addRenderer(raycastRenderer);
         raycastRenderer.addTFChangeListener(visualization);
         tabbedPanel.addTab("Raycaster", raycastRenderer.getPanel());
+
+        File f = new File("C:/Users/horni/Desktop/set1_data/carp8.fld");
+        loadVolume(f);
+
     }
 
     /**
@@ -69,11 +72,7 @@ public class VolVisApplication extends javax.swing.JFrame {
         splitPane.setDividerLocation(600);
 
         loadButton.setText("Load volume");
-        loadButton.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loadButtonActionPerformed(evt);
-            }
-        });
+        loadButton.addActionListener(this::loadButtonActionPerformed);
 
         infoTextPane.setEditable(false);
         jScrollPane1.setViewportView(infoTextPane);
@@ -159,26 +158,31 @@ public class VolVisApplication extends javax.swing.JFrame {
         int returnVal = fc.showOpenDialog(this);
         if (returnVal == JFileChooser.APPROVE_OPTION) {
             File file = fc.getSelectedFile();
-            volume = new Volume(file);
-
-            String infoText = new String("Volume data info:\n");
-            infoText = infoText.concat(file.getName() + "\n");
-            infoText = infoText.concat("dimensions:\t\t" + volume.getDimX() + " x " + volume.getDimY() + " x " + volume.getDimZ() + "\n");
-            infoText = infoText.concat("voxel value range:\t" + volume.getMinimum() + " - " + volume.getMaximum());
-            infoTextPane.setText(infoText);
-            tabbedPanel.remove(raycastRenderer.getTFPanel());
-            tabbedPanel.remove(raycastRenderer.getTF2DPanel());
-            tabbedPanel.remove(raycastRenderer.getTFPanelBack());
-            tabbedPanel.remove(raycastRenderer.getTF2DPanelBack());
-            raycastRenderer.setVolume(volume);
-            tabbedPanel.addTab("Front Transfer Function", raycastRenderer.getTFPanel());
-            tabbedPanel.addTab("Front 2D Transfer Function", raycastRenderer.getTF2DPanel());
-            tabbedPanel.addTab("Back Transfer Function", raycastRenderer.getTFPanelBack());
-            tabbedPanel.addTab("Back 2D Transfer Function", raycastRenderer.getTF2DPanelBack());
-            
-            visualization.update();
+            loadVolume(file);
         }
     }//GEN-LAST:event_loadButtonActionPerformed
+
+    private void loadVolume(File file) {
+        volume = new Volume(file);
+
+        String infoText = "Volume data info:\n";
+        infoText = infoText.concat(file.getName() + "\n");
+        infoText = infoText.concat("dimensions:\t\t" + volume.getDimX() + " x " + volume.getDimY() + " x " + volume.getDimZ() + "\n");
+        infoText = infoText.concat("voxel value range:\t" + volume.getMinimum() + " - " + volume.getMaximum());
+        infoTextPane.setText(infoText);
+        tabbedPanel.remove(raycastRenderer.getTFPanel());
+        tabbedPanel.remove(raycastRenderer.getTF2DPanel());
+        tabbedPanel.remove(raycastRenderer.getTFPanelBack());
+        tabbedPanel.remove(raycastRenderer.getTF2DPanelBack());
+        raycastRenderer.setVolume(volume);
+        tabbedPanel.addTab("Front Transfer Function", raycastRenderer.getTFPanel());
+        tabbedPanel.addTab("Front 2D Transfer Function", raycastRenderer.getTF2DPanel());
+        tabbedPanel.addTab("Back Transfer Function", raycastRenderer.getTFPanelBack());
+        tabbedPanel.addTab("Back 2D Transfer Function", raycastRenderer.getTF2DPanelBack());
+
+        visualization.update();
+        tabbedPanel.setSelectedComponent(raycastRenderer.getPanel());
+    }
 
     /**
      * @param args the command line arguments
@@ -196,13 +200,7 @@ public class VolVisApplication extends javax.swing.JFrame {
                     break;
                 }
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(VolVisApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(VolVisApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(VolVisApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
             java.util.logging.Logger.getLogger(VolVisApplication.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
