@@ -84,17 +84,17 @@ public class GradientVolume {
         VoxelGradient g0, g1, g2, g3, g4, g5;
 
         // Interpolate the x-axis
-        g0 = interpolate(getGradient(x, y, z), getGradient(x + 1, y, z), xFactor);
-        g1 = interpolate(getGradient(x, y + 1, z), getGradient(x + 1, y + 1, z), xFactor);
-        g2 = interpolate(getGradient(x, y, z + 1), getGradient(x + 1, y, z + 1), xFactor);
-        g3 = interpolate(getGradient(x, y + 1, z + 1), getGradient(x + 1, y + 1, z + 1), xFactor);
+        g0 = interpolateGradient(getGradient(x, y, z), getGradient(x + 1, y, z), xFactor);
+        g1 = interpolateGradient(getGradient(x, y + 1, z), getGradient(x + 1, y + 1, z), xFactor);
+        g2 = interpolateGradient(getGradient(x, y, z + 1), getGradient(x + 1, y, z + 1), xFactor);
+        g3 = interpolateGradient(getGradient(x, y + 1, z + 1), getGradient(x + 1, y + 1, z + 1), xFactor);
 
         // Interpolate the y-axis
-        g4 = interpolate(g0, g1, yFactor);
-        g5 = interpolate(g2, g3, yFactor);
+        g4 = interpolateGradient(g0, g1, yFactor);
+        g5 = interpolateGradient(g2, g3, yFactor);
 
         // Interpolate the z-axis and return the result
-        return interpolate(g4, g5, zFactor);
+        return interpolateGradient(g4, g5, zFactor);
     }
 
 
@@ -145,7 +145,7 @@ public class GradientVolume {
 
     }
 
-    private VoxelGradient interpolate(VoxelGradient g0, VoxelGradient g1, float factor) {
+    private VoxelGradient interpolateGradient(VoxelGradient g0, VoxelGradient g1, float factor) {
         VoxelGradient result = new VoxelGradient();
         result.x = g1.x * factor + g0.x * (1 - factor);
         result.y = g1.y * factor + g0.y * (1 - factor);

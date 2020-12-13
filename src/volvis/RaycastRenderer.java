@@ -355,7 +355,16 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
         return new TFColor(r, g, b, alpha);
     }
 
-    TFColor compositeCalculationRGB(int nrSamples, double[] currentPos, double[] increments, TransferFunction tFunction) {
+    /**
+     * Calculates the composite color
+     *
+     * @param nrSamples  how many points to sample along the ray
+     * @param currentPos The current position in the ray
+     * @param increments The direction a step on the ray is in
+     * @param tFunction  Which transfer function values to use in the calculation
+     * @return
+     */
+    public TFColor compositeCalculationRGB(int nrSamples, double[] currentPos, double[] increments, TransferFunction tFunction) {
         TFColor voxel_color = new TFColor();
         double value = volume.getVoxelTrilinear(currentPos);
         int intValue = (int) value;
@@ -432,7 +441,6 @@ public class RaycastRenderer extends Renderer implements TFChangeListener {
      * @param gradMagnitude Gradient magnitude.
      * @return
      */
-
     public double computeOpacity2DTF(double intensity, double radius,
                                      double voxelValue, double gradMagnitude) {
         double angle = Math.atan(gradMagnitude / Math.abs(voxelValue - intensity));
